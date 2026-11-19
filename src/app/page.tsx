@@ -2,59 +2,55 @@ import Image from "next/image";
 import Header from "@/components/Header";
 import Reveal from "@/components/Reveal";
 import ContactForm from "@/components/ContactForm";
-import { media } from "@/config/media";
-import { site, pains, phases, audience, included, faqs } from "@/config/site";
+import StickyCta from "@/components/StickyCta";
+import VideoLite from "@/components/VideoLite";
+import { media, video } from "@/config/media";
+import {
+  site, hero, pains, phases, journey, story, clarity, oneToOne, support, pillars, closing, faqs,
+} from "@/config/site";
 
-const gallery = [media.consulta1, media.consulta2, media.tienda].filter((m) => m.enabled);
+const gallery = [media.tienda, media.consulta1, media.consulta2].filter((m) => m.enabled);
+const showVideo = video.enabled && video.youtubeId;
 
 const jsonLd = {
   "@context": "https://schema.org",
   "@graph": [
+    { "@type": "WebSite", "@id": `${site.url}/#website`, url: site.url, name: site.name, inLanguage: "es-ES", publisher: { "@id": `${site.url}/#person` } },
     {
-      "@type": "WebSite",
-      "@id": `${site.url}/#website`,
-      url: site.url,
-      name: site.name,
-      inLanguage: "es-ES",
-      publisher: { "@id": `${site.url}/#person` },
-    },
-    {
-      "@type": "Person",
-      "@id": `${site.url}/#person`,
-      name: site.name,
-      url: site.url,
-      image: `${site.url}${media.hero.src}`,
-      email: site.email,
+      "@type": "Person", "@id": `${site.url}/#person`, name: site.name, alternateName: "Bea", url: site.url,
+      image: `${site.url}${media.hero.src}`, email: site.email,
       jobTitle: "Asesora en Digitalización y Psicología del Cliente",
-      description: site.description,
+      description: story.aboutTagline,
       address: { "@type": "PostalAddress", addressLocality: site.city, addressCountry: site.country },
-      knowsAbout: ["Digitalización de tiendas de moda", "Psicomarketing", "Catálogo digital", "Ventas online", "Transformación digital del comercio local"],
+      knowsAbout: ["Digitalización de tiendas de moda", "Psicomarketing", "Catálogo digital", "Ventas online", "Transformación digital del comercio local", "Psicología del cliente"],
+      hasOccupation: { "@type": "Occupation", name: "Asesora en digitalización" },
     },
     {
-      "@type": "ProfessionalService",
-      "@id": `${site.url}/#service`,
-      name: `${site.name} · Asesoría ${site.brand}`,
-      url: site.url,
-      image: `${site.url}${media.og}`,
-      email: site.email,
+      "@type": "ProfessionalService", "@id": `${site.url}/#service`, name: `${site.name} · Asesoría ${site.brand}`, url: site.url,
+      image: `${site.url}${media.og}`, logo: `${site.url}${media.logo.src}`, email: site.email,
       founder: { "@id": `${site.url}/#person` },
-      description: "Asesoría 1 a 1 para dueños de tiendas de moda que quieren digitalizar su negocio con claridad, estrategia y acompañamiento humano.",
+      description: oneToOne.title,
+      slogan: story.aboutTagline,
       address: { "@type": "PostalAddress", addressLocality: site.city, addressCountry: site.country },
       areaServed: [{ "@type": "City", name: site.city }, { "@type": "Country", name: "España" }],
       availableLanguage: "es",
+      audience: oneToOne.forWho.map((a) => ({ "@type": "Audience", audienceType: a })),
       hasOfferCatalog: {
-        "@type": "OfferCatalog",
-        name: "Servicios de digitalización",
-        itemListElement: phases.map((p) => ({ "@type": "Offer", itemOffered: { "@type": "Service", name: p.t, description: p.d } })),
+        "@type": "OfferCatalog", name: "Programa VÉRTICE INDIVIDUAL",
+        itemListElement: [
+          ...phases.items.map((p) => ({ "@type": "Offer", itemOffered: { "@type": "Service", name: p.t, description: p.d.join(" ") } })),
+          ...oneToOne.includes.map((i) => ({ "@type": "Offer", itemOffered: { "@type": "Service", name: i } })),
+        ],
       },
     },
     {
-      "@type": "FAQPage",
-      "@id": `${site.url}/#faq`,
-      mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+      "@type": "FAQPage", "@id": `${site.url}/#faq`,
+      mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a.join(" ") } })),
     },
   ],
 };
+
+const P = ({ items }: { items: string[] }) => <>{items.map((t) => <p key={t}>{t}</p>)}</>;
 
 export default function Home() {
   return (
@@ -67,13 +63,11 @@ export default function Home() {
         <section id="inicio" className="hero">
           <div className="container hero-grid">
             <div className="hero-copy">
-              <p className="eyebrow">Asesora de digitalización · Zaragoza y online</p>
-              <h1>Digitaliza tu tienda de moda en Zaragoza y online, sin perder tu esencia</h1>
-              <p className="lead">Más ventas online sin agotarte con herramientas complejas: paso a paso y con acompañamiento humano.</p>
-              <ul className="ticks">
-                <li>Presencia online profesional sin frustración</li>
-                <li>Catálogo digital que realmente vende</li>
-              </ul>
+              <p className="eyebrow">{hero.eyebrow}</p>
+              <h1>{hero.h1}</h1>
+              <p className="lead">{hero.lead}</p>
+              <p className="question">{hero.question}</p>
+              <ul className="ticks">{hero.bullets.map((b) => <li key={b}>{b}</li>)}</ul>
               <div className="hero-actions">
                 <a href={site.bookingHref} className="btn btn-primary">Reserva tu sesión</a>
                 <a href="#como-te-acompano" className="btn btn-ghost">Cómo trabajo</a>
@@ -87,80 +81,179 @@ export default function Home() {
               <div className="badge"><strong>Online y presencial</strong><span>Zaragoza, España</span></div>
             </div>
           </div>
+          <div className="container facts" aria-label="Datos clave">
+            {hero.facts.map((f) => <div key={f.k}><strong>{f.k}</strong><span>{f.v}</span></div>)}
+          </div>
         </section>
 
         {/* PAINS */}
         <section className="section tint" aria-labelledby="bloqueo">
           <div className="container">
-            <Reveal><h2 id="bloqueo">¿Te sientes bloqueado con la digitalización de tu tienda?</h2>
-              <p className="sub">No es falta de capacidad: es falta de claridad, tiempo y acompañamiento.</p></Reveal>
+            <Reveal><h2 id="bloqueo">{pains.title}</h2><p className="sub">{pains.sub}</p></Reveal>
             <div className="grid4">
-              {pains.map((p, i) => (
+              {pains.items.map((p, i) => (
                 <Reveal key={p.t} delay={i * 80} className="card">
-                  <h3>{p.t}</h3><p>{p.d}</p>
+                  <span className="num" aria-hidden="true">0{i + 1}</span>
+                  <h3>{p.t}</h3><P items={p.d} />
                 </Reveal>
               ))}
             </div>
+            <Reveal className="callout"><h3>{pains.alone.t}</h3><p>{pains.alone.d}</p></Reveal>
           </div>
         </section>
 
-        {/* ABOUT */}
-        <section id="quien-es-beatriz" className="section" aria-labelledby="quien">
-          <div className="container about">
-            <Reveal className="about-photo">
-              <Image src={media.about.src} alt={media.about.alt} width={media.about.width} height={media.about.height}
-                loading="lazy" sizes="(max-width: 860px) 80vw, 420px" />
-            </Reveal>
-            <Reveal className="about-copy">
-              <h2 id="quien">¿Quién es Beatriz Garcés Verde?</h2>
-              <p><strong>Beatriz Garcés Verde es asesora en digitalización y psicología del cliente en Zaragoza.</strong> Nació entre zapatos, clientas y cuadernos llenos de ideas, y conoce de primera mano la presión de digitalizar una tienda física sin saber cómo.</p>
-              <p>Su camino combina experiencia en banca ayudando a negocios locales, digitalización real de tiendas de moda y estética, y formación en psicomarketing. De ahí nace <strong>{site.brand}</strong>: estrategia, psicología y acompañamiento humano.</p>
-              <h3>Para quién es</h3>
-              <ul className="ticks">{audience.map((a) => <li key={a}>{a}</li>)}</ul>
-            </Reveal>
-          </div>
-        </section>
-
-        {/* METHOD */}
-        <section id="como-te-acompano" className="section tint" aria-labelledby="metodo">
+        {/* PHASES + JOURNEY */}
+        <section id="como-te-acompano" className="section" aria-labelledby="metodo">
           <div className="container">
-            <Reveal><h2 id="metodo">¿Cómo funciona una sesión y el método {site.brand}?</h2>
-              <p className="sub">Tres fases que ordenan tu digitalización sin caos y sin saturarte.</p></Reveal>
+            <Reveal><h2 id="metodo">{phases.title}</h2><p className="sub">{phases.sub}</p></Reveal>
             <div className="grid3">
-              {phases.map((p, i) => (
+              {phases.items.map((p, i) => (
                 <Reveal key={p.n} delay={i * 100} className="card phase">
                   <span className="num" aria-hidden="true">{p.n}</span>
-                  <h3>{p.t}</h3><p>{p.d}</p>
+                  <h3>{p.t}</h3><P items={p.d} />
+                  <a className="more" href={p.href}>{p.cta} →</a>
                 </Reveal>
               ))}
             </div>
-            <Reveal className="center"><a href={site.bookingHref} className="btn btn-primary">Quiero agendar mi sesión</a></Reveal>
+            <Reveal className="center"><a href={site.bookingHref} className="btn btn-primary">{phases.cta}</a></Reveal>
+
+            <Reveal className="journey-wrap">
+              <h3 className="center-h">{journey.title}</h3>
+              <ol className="journey">
+                {journey.steps.map((s, i) => (
+                  <li key={s.t}><span className="dot">{i + 1}</span><strong>{s.t}</strong><p>{s.d}</p></li>
+                ))}
+              </ol>
+            </Reveal>
           </div>
         </section>
 
-        {/* SERVICES */}
-        <section id="servicios" className="section" aria-labelledby="servicios-h">
-          <div className="container split">
+        {/* STORY */}
+        <section id="quien-es-beatriz" className="section tint" aria-labelledby="quien">
+          <div className="container">
+            <Reveal><p className="eyebrow center-t">{story.kicker}</p><h2 id="quien">{story.homeTitle}</h2></Reveal>
+            <div className="about">
+              <Reveal className="about-photo">
+                <Image src={media.historia.src} alt={media.historia.alt} width={media.historia.width} height={media.historia.height}
+                  loading="lazy" sizes="(max-width: 860px) 80vw, 400px" />
+              </Reveal>
+              <Reveal className="about-copy">
+                <p className="role">{story.role}</p>
+                <P items={story.intro} />
+                <h3>{story.aboutTitle}</h3>
+                <p><strong>{story.aboutSub}</strong></p>
+                <P items={story.paras} />
+              </Reveal>
+            </div>
+            <Reveal><h3 className="center-h" style={{ marginTop: 56 }}>{story.pathTitle}</h3></Reveal>
+            <div className="grid3">
+              {story.path.map((p, i) => (
+                <Reveal key={p.n} delay={i * 100} className="card phase">
+                  <span className="num" aria-hidden="true">{p.n}</span><h3>{p.t}</h3><p>{p.d}</p>
+                </Reveal>
+              ))}
+            </div>
+            <Reveal className="about-2">
+              <Image src={media.about.src} alt={media.about.alt} width={media.about.width} height={media.about.height}
+                loading="lazy" sizes="(max-width: 860px) 60vw, 260px" />
+              <p>{story.aboutTagline}</p>
+            </Reveal>
+          </div>
+        </section>
+
+        {/* CLARITY */}
+        <section id="claridad" className="section" aria-labelledby="claridad-h">
+          <div className="container">
+            <Reveal><h2 id="claridad-h">{clarity.title}</h2><p className="sub">{clarity.sub}</p></Reveal>
+            <Reveal className="narrow-text"><P items={clarity.intro} />
+              <h3>{clarity.whatTitle}</h3><p>{clarity.what}</p></Reveal>
+            <div className="grid3">
+              {clarity.dims.map((d, i) => (
+                <Reveal key={d.t} delay={i * 100} className="card dim">
+                  <h3>{d.t}</h3><p>{d.d}</p>
+                  <p className="label">Qué analizamos</p>
+                  <ul className="mini">{d.list.map((l) => <li key={l}>{l}</li>)}</ul>
+                  <p className="label">Resultado</p>
+                  <p className="result">{d.result}</p>
+                  <a className="more" href={site.bookingHref}>{d.cta} →</a>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ONE TO ONE */}
+        <section id="servicios" className="section tint" aria-labelledby="servicios-h">
+          <div className="container">
             <Reveal>
-              <h2 id="servicios-h">¿Qué incluye la asesoría 1 a 1?</h2>
-              <p className="sub left">Un programa personalizado, online o presencial en Zaragoza, con una dedicación de 1 a 2 horas semanales.</p>
+              <p className="eyebrow center-t">{oneToOne.kicker}</p>
+              <h2 id="servicios-h">Asesoría 1 a 1: ¿qué incluye el proceso {site.brand}?</h2>
+              <p className="sub">{oneToOne.title}</p>
             </Reveal>
-            <Reveal delay={100}>
-              <ul className="checks">{included.map((i) => <li key={i}>{i}</li>)}</ul>
-            </Reveal>
+            <div className="split">
+              <Reveal>
+                <h3>{oneToOne.forTitle}</h3>
+                <ul className="checks">{oneToOne.forWho.map((i) => <li key={i}>{i}</li>)}</ul>
+              </Reveal>
+              <Reveal delay={100}>
+                <h3>{oneToOne.includesTitle}</h3>
+                <ul className="checks">{oneToOne.includes.map((i) => <li key={i}>{i}</li>)}</ul>
+              </Reveal>
+            </div>
+            <Reveal className="center"><a href={site.bookingHref} className="btn btn-primary">Reserva tu sesión</a></Reveal>
           </div>
         </section>
 
-        {/* GALLERY: solo se renderiza si hay al menos una foto activada en media.ts */}
+        {/* SUPPORT */}
+        <section id="acompanamiento" className="section" aria-labelledby="acomp-h">
+          <div className="container">
+            <Reveal><h2 id="acomp-h">{support.title}</h2><p className="sub">{support.sub}</p>
+              <p className="sub">{support.intro}</p></Reveal>
+            <ol className="timeline">
+              {support.items.map((s, i) => (
+                <Reveal as="li" key={s.t} delay={i * 100}>
+                  <span className="dot">{i + 1}</span><div><h3>{s.t}</h3><p>{s.d}</p></div>
+                </Reveal>
+              ))}
+            </ol>
+          </div>
+        </section>
+
+        {/* PILLARS */}
+        <section id="pilares" className="section tint" aria-labelledby="pilares-h">
+          <div className="container">
+            <Reveal><h2 id="pilares-h">{pillars.title}</h2><p className="sub">{pillars.sub}</p></Reveal>
+            <div className="grid3">
+              {pillars.items.map((p, i) => (
+                <Reveal key={p.t} delay={i * 100} className="card phase">
+                  <span className="num" aria-hidden="true">0{i + 1}</span>
+                  <h3>{p.t}</h3><p>{p.d}</p>
+                  <a className="more" href={site.bookingHref}>{p.cta} →</a>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* VIDEO: solo con un vídeo real y público (ver media.ts) */}
+        {showVideo && (
+          <section id="video" className="section" aria-labelledby="video-h">
+            <div className="container narrow">
+              <Reveal><h2 id="video-h">{video.title}</h2><VideoLite id={video.youtubeId} title={video.title} /></Reveal>
+            </div>
+          </section>
+        )}
+
+        {/* GALLERY: solo con fotos activadas en media.ts */}
         {gallery.length > 0 && (
           <section id="el-espacio" className="section" aria-labelledby="espacio">
             <div className="container">
-              <Reveal><h2 id="espacio">El espacio y la consulta</h2>
-                <p className="sub">Así es trabajar con Beatriz, online o en persona en Zaragoza.</p></Reveal>
+              <Reveal><h2 id="espacio">El mundo de la tienda física</h2>
+                <p className="sub">Digitalizar no es dejar de ser tú: es dar más fuerza a lo que ya haces bien.</p></Reveal>
               <div className="gallery">
                 {gallery.map((m, i) => (
                   <Reveal key={m.src} as="figure" delay={i * 100}>
-                    <Image src={m.src} alt={m.alt} width={m.width} height={m.height} loading="lazy" sizes="(max-width: 860px) 100vw, 360px" />
+                    <Image src={m.src} alt={m.alt} width={m.width} height={m.height} loading="lazy" sizes="(max-width: 860px) 100vw, 1000px" />
                   </Reveal>
                 ))}
               </div>
@@ -171,24 +264,26 @@ export default function Home() {
         {/* FAQ */}
         <section id="preguntas-frecuentes" className="section tint" aria-labelledby="faq">
           <div className="container narrow">
-            <Reveal><h2 id="faq">Preguntas frecuentes sobre digitalizar tu tienda</h2></Reveal>
+            <Reveal><h2 id="faq">Preguntas frecuentes: ¿qué vas a transformar?</h2></Reveal>
             <div className="faq">
               {faqs.map((f) => (
-                <details key={f.q}>
-                  <summary><h3>{f.q}</h3></summary>
-                  <p>{f.a}</p>
-                </details>
+                <details key={f.q}><summary><h3>{f.q}</h3></summary><div className="ans"><P items={f.a} /></div></details>
               ))}
             </div>
           </div>
         </section>
 
-        {/* CONTACT */}
+        {/* CLOSING + CONTACT */}
         <section id="contacto" className="section cta" aria-labelledby="contacto-h">
           <div className="container narrow">
             <Reveal>
-              <h2 id="contacto-h">¿Cómo reservo mi sesión con Beatriz?</h2>
-              <p className="sub light">Completa el formulario y te respondo personalmente. Digitalizar tu tienda no tiene por qué sentirse abrumador.</p>
+              <h2 id="empieza">{closing.title}</h2>
+              <p className="sub light">{closing.lead[0]} {closing.lead[1]}</p>
+              <h3 className="ready">{closing.ready}</h3>
+              <ul className="ticks light">{closing.points.map((p) => <li key={p}>{p}</li>)}</ul>
+              <h2 id="contacto-h" style={{ marginTop: 40 }}>{closing.formTitle}</h2>
+              <p className="sub light">{closing.formSub}</p>
+              <div className="form-text">{closing.formText.map((t) => <p key={t}>{t}</p>)}</div>
             </Reveal>
             <Reveal delay={100} className="form-wrap"><ContactForm /></Reveal>
             <p className="contact-line">Atención online y presencial (Zaragoza, España) · <a href={`mailto:${site.email}`}>{site.email}</a></p>
@@ -196,8 +291,12 @@ export default function Home() {
         </section>
       </main>
       <footer className="footer">
-        <div className="container">© 2026 {site.name} · {site.city}, España</div>
+        <div className="container">
+          <Image className="foot-logo" src={media.logo.src} alt={media.logo.alt} width={media.logo.width} height={media.logo.height} loading="lazy" />
+          <p>© 2026 {site.name} · {site.city}, España</p>
+        </div>
       </footer>
+      <StickyCta />
     </>
   );
 }
