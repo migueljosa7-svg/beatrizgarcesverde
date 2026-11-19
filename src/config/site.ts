@@ -179,3 +179,40 @@ export const faqs: { q: string; a: string[] }[] = [
   { q: "¿Es presencial u online? ¿Cuánto cuesta?", a: ["Atiendo online y de forma presencial en Zaragoza. El precio se confirma al contactar: escribe a beatrizgarcesverde@gmail.com o usa el formulario de contacto."] },
   { q: "¿Cómo reservo una sesión?", a: ["Pulsa «Reserva tu sesión», rellena el formulario de contacto con tu nombre, email y móvil, y Beatriz te responde personalmente."] },
 ];
+
+/** Menú idéntico al de la web original (Trabaja Conmigo = desplegable con 3 opciones). */
+export const nav = [
+  { label: "Inicio", href: "#inicio" },
+  { label: "Acerca de Mi", href: "#quien-es-beatriz" },
+  {
+    label: "Trabaja Conmigo",
+    children: [
+      { label: "Claridad y Estrategia", href: "#claridad" },
+      { label: "Asesoria 1 a 1", href: "#servicios" },
+      { label: "Acompañamiento", href: "#acompanamiento" },
+    ],
+  },
+  { label: "Contacto", href: "#contacto" },
+];
+
+export const contact = {
+  kicker: "— Hablemos",
+  title: "Ponte en contacto conmigo",
+  text: [
+    "Digitalizar tu tienda no tiene por qué sentirse confuso ni abrumador.",
+    "Si necesitas claridad, una hoja de ruta o simplemente una opinión profesional sobre tu situación, escríbeme y te responderé personalmente.",
+    "Mi objetivo es acompañarte a avanzar con calma, estrategia y sin saturarte.",
+  ],
+  addressLabel: "Dirección",
+  address: "Atención online y presencial (Zaragoza, España)",
+  emailLabel: "Email",
+  formTitle: "Envíame un mensaje",
+};
+
+export const aboutExtra = {
+  welcome: "— Bienvenido, Soy Bea",
+  title: "Acerca de mi",
+  moreBtn: "Toda mi historia",
+  moreOneToOne: "Más sobre VÉRTICE INDIVIDUAL",
+  transform: "¿Qué vas a transformar?",
+};

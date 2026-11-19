@@ -6,10 +6,22 @@ import StickyCta from "@/components/StickyCta";
 import VideoLite from "@/components/VideoLite";
 import { media, video } from "@/config/media";
 import {
-  site, hero, pains, phases, journey, story, clarity, oneToOne, support, pillars, closing, faqs,
+  site, hero, pains, phases, journey, story, clarity, oneToOne, support, pillars, closing, faqs, contact, aboutExtra,
 } from "@/config/site";
 
-const gallery = [media.tienda, media.consulta1, media.consulta2].filter((m) => m.enabled);
+const gallery = [media.consulta1, media.consulta2].filter((m) => m.enabled);
+
+type Pic = { src: string; alt: string; width: number; height: number };
+/** Banner de cabecera (foto de fondo de cada bloque en la web original) con título superpuesto. */
+const Banner = ({ pic, kicker, title }: { pic: Pic; kicker?: string; title: string }) => (
+  <div className="banner">
+    <Image src={pic.src} alt={pic.alt} width={pic.width} height={pic.height} loading="lazy" sizes="(max-width: 1140px) 100vw, 1100px" />
+    <div className="banner-txt">{kicker && <p className="eyebrow">{kicker}</p>}<p className="banner-t">{title}</p></div>
+  </div>
+);
+const CardImg = ({ pic }: { pic: Pic }) => (
+  <div className="card-img"><Image src={pic.src} alt={pic.alt} width={pic.width} height={pic.height} loading="lazy" sizes="(max-width: 860px) 100vw, 360px" /></div>
+);
 const showVideo = video.enabled && video.youtubeId;
 
 const jsonLd = {
@@ -133,11 +145,15 @@ export default function Home() {
           <div className="container">
             <Reveal><p className="eyebrow center-t">{story.kicker}</p><h2 id="quien">{story.homeTitle}</h2></Reveal>
             <div className="about">
-              <Reveal className="about-photo">
-                <Image src={media.historia.src} alt={media.historia.alt} width={media.historia.width} height={media.historia.height}
-                  loading="lazy" sizes="(max-width: 860px) 80vw, 400px" />
+              <Reveal className="about-photos">
+                {[media.historia, media.exterior2, media.exterior3].map((m, i) => (
+                  <div key={m.src} className={`about-photo p${i}`}>
+                    <Image src={m.src} alt={m.alt} width={m.width} height={m.height} loading="lazy" sizes="(max-width: 860px) 60vw, 260px" />
+                  </div>
+                ))}
               </Reveal>
               <Reveal className="about-copy">
+                <p className="eyebrow">{aboutExtra.welcome}</p>
                 <p className="role">{story.role}</p>
                 <P items={story.intro} />
                 <h3>{story.aboutTitle}</h3>
@@ -164,18 +180,22 @@ export default function Home() {
         {/* CLARITY */}
         <section id="claridad" className="section" aria-labelledby="claridad-h">
           <div className="container">
+            <Reveal><Banner pic={media.banner.claridad} title={clarity.title} /></Reveal>
             <Reveal><h2 id="claridad-h">{clarity.title}</h2><p className="sub">{clarity.sub}</p></Reveal>
             <Reveal className="narrow-text"><P items={clarity.intro} />
               <h3>{clarity.whatTitle}</h3><p>{clarity.what}</p></Reveal>
             <div className="grid3">
               {clarity.dims.map((d, i) => (
-                <Reveal key={d.t} delay={i * 100} className="card dim">
+                <Reveal key={d.t} delay={i * 100} className="card dim has-img">
+                  <CardImg pic={media.claridad[i]} />
+                  <div className="card-body">
                   <h3>{d.t}</h3><p>{d.d}</p>
                   <p className="label">Qué analizamos</p>
                   <ul className="mini">{d.list.map((l) => <li key={l}>{l}</li>)}</ul>
                   <p className="label">Resultado</p>
                   <p className="result">{d.result}</p>
                   <a className="more" href={site.bookingHref}>{d.cta} →</a>
+                  </div>
                 </Reveal>
               ))}
             </div>
@@ -185,6 +205,7 @@ export default function Home() {
         {/* ONE TO ONE */}
         <section id="servicios" className="section tint" aria-labelledby="servicios-h">
           <div className="container">
+            <Reveal><Banner pic={media.banner.asesoria} kicker={oneToOne.kicker} title={aboutExtra.moreOneToOne} /></Reveal>
             <Reveal>
               <p className="eyebrow center-t">{oneToOne.kicker}</p>
               <h2 id="servicios-h">Asesoría 1 a 1: ¿qué incluye el proceso {site.brand}?</h2>
@@ -207,15 +228,17 @@ export default function Home() {
         {/* SUPPORT */}
         <section id="acompanamiento" className="section" aria-labelledby="acomp-h">
           <div className="container">
+            <Reveal><Banner pic={media.banner.acompanamiento} title={support.title} /></Reveal>
             <Reveal><h2 id="acomp-h">{support.title}</h2><p className="sub">{support.sub}</p>
               <p className="sub">{support.intro}</p></Reveal>
-            <ol className="timeline">
+            <div className="grid3">
               {support.items.map((s, i) => (
-                <Reveal as="li" key={s.t} delay={i * 100}>
-                  <span className="dot">{i + 1}</span><div><h3>{s.t}</h3><p>{s.d}</p></div>
+                <Reveal key={s.t} delay={i * 100} className="card has-img">
+                  <CardImg pic={media.acompanamiento[i]} />
+                  <div className="card-body"><span className="num" aria-hidden="true">0{i + 1}</span><h3>{s.t}</h3><p>{s.d}</p></div>
                 </Reveal>
               ))}
-            </ol>
+            </div>
           </div>
         </section>
 
@@ -225,10 +248,13 @@ export default function Home() {
             <Reveal><h2 id="pilares-h">{pillars.title}</h2><p className="sub">{pillars.sub}</p></Reveal>
             <div className="grid3">
               {pillars.items.map((p, i) => (
-                <Reveal key={p.t} delay={i * 100} className="card phase">
-                  <span className="num" aria-hidden="true">0{i + 1}</span>
-                  <h3>{p.t}</h3><p>{p.d}</p>
-                  <a className="more" href={site.bookingHref}>{p.cta} →</a>
+                <Reveal key={p.t} delay={i * 100} className="card phase has-img">
+                  <CardImg pic={[media.pilar1, media.pilar2, media.pilar3][i]} />
+                  <div className="card-body">
+                    <span className="num" aria-hidden="true">0{i + 1}</span>
+                    <h3>{p.t}</h3><p>{p.d}</p>
+                    <a className="more" href={site.bookingHref}>{p.cta} →</a>
+                  </div>
                 </Reveal>
               ))}
             </div>
@@ -275,7 +301,8 @@ export default function Home() {
 
         {/* CLOSING + CONTACT */}
         <section id="contacto" className="section cta" aria-labelledby="contacto-h">
-          <div className="container narrow">
+          <Image className="cta-bg" src={media.banner.contacto.src} alt="" width={media.banner.contacto.width} height={media.banner.contacto.height} loading="lazy" sizes="100vw" aria-hidden="true" />
+          <div className="container narrow cta-in">
             <Reveal>
               <h2 id="empieza">{closing.title}</h2>
               <p className="sub light">{closing.lead[0]} {closing.lead[1]}</p>
@@ -284,6 +311,16 @@ export default function Home() {
               <h2 id="contacto-h" style={{ marginTop: 40 }}>{closing.formTitle}</h2>
               <p className="sub light">{closing.formSub}</p>
               <div className="form-text">{closing.formText.map((t) => <p key={t}>{t}</p>)}</div>
+              <div className="contact-info">
+                <p className="eyebrow">{contact.kicker}</p>
+                <h3>{contact.title}</h3>
+                {contact.text.map((t) => <p key={t}>{t}</p>)}
+                <div className="info-cards">
+                  <div><strong>{contact.addressLabel}</strong><span>{contact.address}</span></div>
+                  <div><strong>{contact.emailLabel}</strong><a href={`mailto:${site.email}`}>{site.email}</a></div>
+                </div>
+                <h3 className="send">{contact.formTitle}</h3>
+              </div>
             </Reveal>
             <Reveal delay={100} className="form-wrap"><ContactForm /></Reveal>
             <p className="contact-line">Atención online y presencial (Zaragoza, España) · <a href={`mailto:${site.email}`}>{site.email}</a></p>

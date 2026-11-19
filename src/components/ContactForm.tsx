@@ -15,11 +15,7 @@ export default function ContactForm() {
     const form = e.currentTarget;
     setStatus("sending");
     try {
-      const res = await fetch(FORMSPREE_ENDPOINT, {
-        method: "POST",
-        headers: { Accept: "application/json" },
-        body: new FormData(form),
-      });
+      const res = await fetch(FORMSPREE_ENDPOINT, { method: "POST", headers: { Accept: "application/json" }, body: new FormData(form) });
       if (!res.ok) throw new Error(String(res.status));
       form.reset();
       setStatus("ok");
@@ -31,12 +27,15 @@ export default function ContactForm() {
   return (
     <form onSubmit={onSubmit} className="form" aria-busy={status === "sending"}>
       <input type="hidden" name="_subject" value="Reserva de sesión VÉRTICE" />
-      <label>Nombre y apellidos<input name="nombre" required autoComplete="name" /></label>
-      <label>Email<input name="email" type="email" required autoComplete="email" inputMode="email" /></label>
-      <label>Móvil<input name="movil" type="tel" required autoComplete="tel" inputMode="tel" /></label>
-      <label>Cuéntame sobre tu tienda<textarea name="mensaje" rows={4} required /></label>
+      <div className="row2">
+        <label>Nombre *<input name="nombre" required autoComplete="given-name" /></label>
+        <label>Apellidos<input name="apellidos" autoComplete="family-name" /></label>
+      </div>
+      <label>Email *<input name="email" type="email" required autoComplete="email" inputMode="email" /></label>
+      <label>Móvil *<input name="movil" type="tel" required autoComplete="tel" inputMode="tel" /></label>
+      <label>Mensaje *<textarea name="mensaje" rows={4} required /></label>
       <button className="btn btn-primary" type="submit" disabled={status === "sending"}>
-        {status === "sending" ? "Enviando..." : "Reserva tu sesión"}
+        {status === "sending" ? "Enviando..." : "Enviar"}
       </button>
       <div role="status" aria-live="polite">
         {status === "ok" && <p className="ok">¡Mensaje enviado! Te respondo personalmente lo antes posible.</p>}
