@@ -1,23 +1,22 @@
 "use client";
 import { useEffect, useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-/** Barra de reserva fija solo en móvil: aparece al salir del hero y se oculta en la sección de contacto. */
+/** Barra de reserva fija solo en móvil: aparece tras hacer scroll y no se muestra en /contact. */
 export default function StickyCta() {
   const [show, setShow] = useState(false);
+  const path = usePathname();
   useEffect(() => {
-    const hero = document.getElementById("inicio");
-    const contact = document.getElementById("contacto");
-    if (!hero || !contact || !("IntersectionObserver" in window)) return;
-    let heroOut = false, contactIn = false;
-    const update = () => setShow(heroOut && !contactIn);
-    const a = new IntersectionObserver(([e]) => { heroOut = !e.isIntersecting; update(); });
-    const b = new IntersectionObserver(([e]) => { contactIn = e.isIntersecting; update(); });
-    a.observe(hero); b.observe(contact);
-    return () => { a.disconnect(); b.disconnect(); };
-  }, []);
+    const on = () => setShow(window.scrollY > 520);
+    on();
+    window.addEventListener("scroll", on, { passive: true });
+    return () => window.removeEventListener("scroll", on);
+  }, [path]);
+  const visible = show && path !== "/contact";
   return (
-    <div className={`sticky-cta ${show ? "show" : ""}`} aria-hidden={!show}>
-      <a href="#contacto" className="btn btn-primary" tabIndex={show ? 0 : -1}>Reserva tu sesión</a>
+    <div className={`sticky-cta ${visible ? "show" : ""}`} aria-hidden={!visible}>
+      <Link href="/contact" className="btn btn-primary" tabIndex={visible ? 0 : -1}>Reserva tu sesión</Link>
     </div>
   );
 }

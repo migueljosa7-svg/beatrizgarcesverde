@@ -11,7 +11,7 @@ export const site = {
   title: "Digitalización de tiendas de moda en Zaragoza y online | Beatriz Garcés Verde",
   description:
     "Beatriz Garcés Verde acompaña a dueños de tiendas de moda a digitalizar su negocio paso a paso, sin tecnicismos y sin perder su esencia. Asesoría 1 a 1 online y presencial en Zaragoza.",
-  bookingHref: "#contacto",
+  bookingHref: "/contact",
 };
 
 export const hero = {
@@ -49,9 +49,9 @@ export const phases = {
   sub: "Un proceso claro, humano y estratégico para que digitalizar tu tienda deje de ser un peso y se convierta en una oportunidad.",
   cta: "Quiero agendar mi sesión VÉRTICE",
   items: [
-    { n: "01", t: "Claridad estratégica desde el primer día", d: ["Comprendemos tu punto de partida, tus bloqueos y el estilo real de tu tienda.", "Definimos una hoja de ruta simple, priorizada y adaptada a tu ritmo."], href: "#claridad", cta: "Descubrir esta fase" },
-    { n: "02", t: "Acompañamiento práctico paso a paso", d: ["Te ayudo a configurar tus herramientas, revisar textos, ordenar tu catálogo y avanzar cada semana sin agobios.", "Pequeños pasos, resultados reales."], href: "#acompanamiento", cta: "Ver cómo funciona" },
-    { n: "03", t: "Transformación emocional y confianza digital", d: ["Trabajamos miedos, creencias y bloqueos para que el mundo online deje de intimidarte. Construyes seguridad, claridad y decisiones valientes."], href: "#pilares", cta: "Quiero sentirme así" },
+    { n: "01", t: "Claridad estratégica desde el primer día", d: ["Comprendemos tu punto de partida, tus bloqueos y el estilo real de tu tienda.", "Definimos una hoja de ruta simple, priorizada y adaptada a tu ritmo."], href: "/books", cta: "Descubrir esta fase" },
+    { n: "02", t: "Acompañamiento práctico paso a paso", d: ["Te ayudo a configurar tus herramientas, revisar textos, ordenar tu catálogo y avanzar cada semana sin agobios.", "Pequeños pasos, resultados reales."], href: "/one-on-one-counseling", cta: "Ver cómo funciona" },
+    { n: "03", t: "Transformación emocional y confianza digital", d: ["Trabajamos miedos, creencias y bloqueos para que el mundo online deje de intimidarte. Construyes seguridad, claridad y decisiones valientes."], href: "/stage-shows", cta: "Quiero sentirme así" },
   ],
 };
 
@@ -146,9 +146,9 @@ export const pillars = {
   title: "Los 3 pilares que hacen que tu digitalización funcione de verdad",
   sub: "Un proceso claro, humano y estratégico para que avances sin caos ni bloqueo.",
   items: [
-    { t: "Diagnóstico & Dirección Estratégica", d: "Analizamos tu tienda física, tu cliente ideal y tus bloqueos digitales. Trazamos un plan simple, realista y adaptado a tu ritmo.", cta: "Quiero claridad" },
-    { t: "Implementación práctica & Acompañamiento", d: "Configuramos herramientas, revisamos textos y sugerimos ordenar tu catálogo.", cta: "Quiero avanzar" },
-    { t: "Consolidación & Crecimiento sostenible", d: "Optimizamos tu embudo digital, fidelización y contenido sostenible. Terminamos con una hoja de ruta para tu próxima etapa VÉRTICE.", cta: "Quiero crecer" },
+    { t: "Diagnóstico & Dirección Estratégica", d: "Analizamos tu tienda física, tu cliente ideal y tus bloqueos digitales. Trazamos un plan simple, realista y adaptado a tu ritmo.", cta: "Quiero claridad", href: "/books" },
+    { t: "Implementación práctica & Acompañamiento", d: "Configuramos herramientas, revisamos textos y sugerimos ordenar tu catálogo.", cta: "Quiero avanzar", href: "/one-on-one-counseling" },
+    { t: "Consolidación & Crecimiento sostenible", d: "Optimizamos tu embudo digital, fidelización y contenido sostenible. Terminamos con una hoja de ruta para tu próxima etapa VÉRTICE.", cta: "Quiero crecer", href: "/stage-shows" },
   ],
 };
 
@@ -182,18 +182,22 @@ export const faqs: { q: string; a: string[] }[] = [
 
 /** Menú idéntico al de la web original (Trabaja Conmigo = desplegable con 3 opciones). */
 export const nav = [
-  { label: "Inicio", href: "#inicio" },
-  { label: "Acerca de Mi", href: "#quien-es-beatriz" },
+  { label: "Inicio", href: "/" },
+  { label: "Acerca de Mi", href: "/about" },
   {
     label: "Trabaja Conmigo",
     children: [
-      { label: "Claridad y Estrategia", href: "#claridad" },
-      { label: "Asesoria 1 a 1", href: "#servicios" },
-      { label: "Acompañamiento", href: "#acompanamiento" },
+      { label: "Claridad y Estrategia", href: "/books" },
+      { label: "Asesoria 1 a 1", href: "/one-on-one-counseling" },
+      { label: "Acompañamiento", href: "/stage-shows" },
     ],
   },
-  { label: "Contacto", href: "#contacto" },
+  { label: "Preguntas", href: "/preguntas-frecuentes" },
+  { label: "Contacto", href: "/contact" },
 ];
+
+/** Rutas públicas (sitemap): mismas URLs que la web original de WordPress + la nueva /preguntas-frecuentes. */
+export const routes = ["/", "/about", "/books", "/one-on-one-counseling", "/stage-shows", "/contact", "/preguntas-frecuentes"];
 
 export const contact = {
   kicker: "— Hablemos",
@@ -216,3 +220,6 @@ export const aboutExtra = {
   moreOneToOne: "Más sobre VÉRTICE INDIVIDUAL",
   transform: "¿Qué vas a transformar?",
 };
+
+/** FAQ original de la web (las 8 de /one-on-one-counseling). El resto son añadidos nuestros. */
+export const faqsOriginal = faqs.slice(1, 9);

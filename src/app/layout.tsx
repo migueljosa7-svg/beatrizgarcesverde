@@ -1,5 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, Inter } from "next/font/google";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import StickyCta from "@/components/StickyCta";
+import JsonLd from "@/components/JsonLd";
+import { globalGraph } from "@/lib/schema";
 import { site } from "@/config/site";
 import { media } from "@/config/media";
 import "./globals.css";
@@ -9,9 +14,9 @@ const sans = Inter({ subsets: ["latin"], variable: "--font-sans", display: "swap
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
-  title: site.title,
+  title: { default: site.title, template: `%s | ${site.name}` },
   description: site.description,
-  alternates: { canonical: site.url },
+  alternates: { canonical: "/" },
   authors: [{ name: site.name }],
   openGraph: {
     type: "website", url: site.url, siteName: site.name, locale: "es_ES",
@@ -33,7 +38,14 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es" className={`${display.variable} ${sans.variable}`}>
-      <body>{children}</body>
+      <body>
+        <JsonLd data={globalGraph} />
+        <a href="#contenido" className="skip">Ir al contenido</a>
+        <Header />
+        <main id="contenido">{children}</main>
+        <Footer />
+        <StickyCta />
+      </body>
     </html>
   );
 }

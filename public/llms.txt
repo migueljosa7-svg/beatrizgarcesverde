@@ -45,14 +45,14 @@ Falta de tiempo; miedo a invertir sin claridad; no saber por dónde empezar (pla
 
 ## Contacto y reserva
 - Web: https://beatrizgarcesverde.com
-- Reservar sesión: https://beatrizgarcesverde.com/#contacto
+- Reservar sesión: https://beatrizgarcesverde.com/contact
 - Email: beatrizgarcesverde@gmail.com
 
-## Secciones de la web
-- [Inicio](https://beatrizgarcesverde.com/)
-- [Quién es Beatriz y su historia](https://beatrizgarcesverde.com/#quien-es-beatriz)
-- [Claridad estratégica](https://beatrizgarcesverde.com/#claridad)
-- [Asesoría 1 a 1 VÉRTICE](https://beatrizgarcesverde.com/#servicios)
-- [Acompañamiento paso a paso](https://beatrizgarcesverde.com/#acompanamiento)
-- [Preguntas frecuentes](https://beatrizgarcesverde.com/#preguntas-frecuentes)
-- [Contacto](https://beatrizgarcesverde.com/#contacto)
+## Páginas de la web
+- [Inicio](https://beatrizgarcesverde.com/): propuesta de valor, bloqueos habituales, fases y pilares
+- [Acerca de mí](https://beatrizgarcesverde.com/about): historia de Beatriz y camino profesional
+- [Claridad y Estrategia](https://beatrizgarcesverde.com/books): diagnóstico de negocio físico, cliente ideal y bloqueos
+- [Asesoría 1 a 1 VÉRTICE INDIVIDUAL](https://beatrizgarcesverde.com/one-on-one-counseling): para quién es, qué incluye y preguntas
+- [Acompañamiento paso a paso](https://beatrizgarcesverde.com/stage-shows): configuración, textos y catálogo, seguimiento semanal
+- [Preguntas frecuentes](https://beatrizgarcesverde.com/preguntas-frecuentes)
+- [Contacto y reserva](https://beatrizgarcesverde.com/contact)

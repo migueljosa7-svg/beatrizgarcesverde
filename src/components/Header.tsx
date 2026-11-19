@@ -1,15 +1,18 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { nav } from "@/config/site";
 import { media } from "@/config/media";
 
 export default function Header() {
-  const [open, setOpen] = useState(false);       // menú móvil
-  const [sub, setSub] = useState(false);         // desplegable "Trabaja Conmigo"
+  const [open, setOpen] = useState(false);   // menú móvil
+  const [sub, setSub] = useState(false);     // desplegable "Trabaja Conmigo"
   const ref = useRef<HTMLElement>(null);
+  const path = usePathname();
 
-  // Cierra el desplegable al hacer clic fuera o pulsar Escape
+  useEffect(() => { setOpen(false); setSub(false); }, [path]);
   useEffect(() => {
     const onDoc = (e: MouseEvent) => { if (ref.current && !ref.current.contains(e.target as Node)) setSub(false); };
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") { setSub(false); setOpen(false); } };
@@ -18,19 +21,20 @@ export default function Header() {
     return () => { document.removeEventListener("mousedown", onDoc); document.removeEventListener("keydown", onKey); };
   }, []);
 
-  const close = () => { setOpen(false); setSub(false); };
+  const cur = (href: string) => (path === href ? "page" : undefined);
 
   return (
     <header className="header" ref={ref}>
       <div className="container header-in">
-        <a href="#inicio" className="logo" aria-label="Beatriz Garcés Verde, inicio" onClick={close}>
+        <Link href="/" className="logo" aria-label="Beatriz Garcés Verde, inicio">
           <Image src={media.logo.src} alt="" width={media.logo.width} height={media.logo.height} priority className="logo-img" />
           <span className="logo-name">Beatriz Garcés <span>Verde</span></span>
-        </a>
+        </Link>
         <nav id="nav" className={`nav ${open ? "open" : ""}`} aria-label="Principal">
           {nav.map((item) =>
             "children" in item && item.children ? (
-              <div key={item.label} className={`dropdown ${sub ? "open" : ""}`}
+              <div key={item.label}
+                className={`dropdown ${sub ? "open" : ""} ${item.children.some((c) => c.href === path) ? "active" : ""}`}
                 onMouseEnter={() => window.matchMedia("(hover: hover)").matches && setSub(true)}
                 onMouseLeave={() => window.matchMedia("(hover: hover)").matches && setSub(false)}>
                 <button type="button" className="dropdown-btn" aria-expanded={sub} aria-haspopup="true" onClick={() => setSub(!sub)}>
@@ -39,15 +43,15 @@ export default function Header() {
                 </button>
                 <ul className="dropdown-menu">
                   {item.children.map((c) => (
-                    <li key={c.href}><a href={c.href} onClick={close}>{c.label}</a></li>
+                    <li key={c.href}><Link href={c.href} aria-current={cur(c.href)}>{c.label}</Link></li>
                   ))}
                 </ul>
               </div>
             ) : (
-              <a key={item.label} href={item.href} onClick={close}>{item.label}</a>
+              <Link key={item.label} href={item.href} aria-current={cur(item.href)}>{item.label}</Link>
             )
           )}
-          <a href="#contacto" className="btn btn-primary nav-cta" onClick={close}>Reservar Cita</a>
+          <Link href="/contact" className="btn btn-primary nav-cta">Reservar Cita</Link>
         </nav>
         <button className="burger" aria-expanded={open} aria-controls="nav" aria-label={open ? "Cerrar menú" : "Abrir menú"} onClick={() => setOpen(!open)}>
           <span /><span /><span />
